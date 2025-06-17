@@ -7,7 +7,8 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixin {
+class _LoginPageState extends State<LoginPage>
+    with SingleTickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
   String email = '';
   String password = '';
@@ -37,7 +38,8 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
     if (_formKey.currentState?.validate() ?? false) {
       Navigator.of(context).pushReplacement(
         PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) => WelcomePage(),
+          pageBuilder:
+              (context, animation, secondaryAnimation) => WelcomePage(),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return FadeTransition(opacity: animation, child: child);
           },
@@ -48,9 +50,9 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
   }
 
   bool get _isLoginButtonEnabled {
-    return email.isNotEmpty && 
-           RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(email) && 
-           password.length >= 6;
+    return email.isNotEmpty &&
+        RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(email) &&
+        password.length >= 6;
   }
 
   @override
@@ -58,8 +60,17 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(
+              '"C:\Users\haiqal\Downloads\flutter\flutter_application_1\project_dev\lib\pexels-amresh444-32572717.jpg"',
+            ), // <-- your image path
+            fit: BoxFit.cover,
+          ),
           gradient: LinearGradient(
-            colors: [Colors.teal.shade700, Colors.teal.shade300],
+            colors: [
+              Colors.teal.shade700.withOpacity(0.7),
+              Colors.teal.shade300.withOpacity(0.7),
+            ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -108,18 +119,27 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                       SizedBox(height: 30),
                       TextFormField(
                         decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.email, color: Colors.teal.shade700),
+                          prefixIcon: Icon(
+                            Icons.email,
+                            color: Colors.teal.shade700,
+                          ),
                           labelText: 'Email',
                           labelStyle: TextStyle(color: Colors.teal.shade700),
                           filled: true,
                           fillColor: Colors.teal.shade50,
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(14),
-                            borderSide: BorderSide(color: Colors.teal.shade700, width: 2),
+                            borderSide: BorderSide(
+                              color: Colors.teal.shade700,
+                              width: 2,
+                            ),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(14),
-                            borderSide: BorderSide(color: Colors.teal.shade200, width: 1),
+                            borderSide: BorderSide(
+                              color: Colors.teal.shade200,
+                              width: 1,
+                            ),
                           ),
                           errorBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(14),
@@ -127,12 +147,17 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                           ),
                           focusedErrorBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(14),
-                            borderSide: BorderSide(color: Colors.red.shade700, width: 2),
+                            borderSide: BorderSide(
+                              color: Colors.red.shade700,
+                              width: 2,
+                            ),
                           ),
                         ),
                         keyboardType: TextInputType.emailAddress,
                         validator: (value) {
-                          if (value == null || value.isEmpty || !RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                          if (value == null ||
+                              value.isEmpty ||
+                              !RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
                             return 'Please enter a valid email';
                           }
                           return null;
@@ -146,18 +171,27 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                       SizedBox(height: 20),
                       TextFormField(
                         decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.lock, color: Colors.teal.shade700),
+                          prefixIcon: Icon(
+                            Icons.lock,
+                            color: Colors.teal.shade700,
+                          ),
                           labelText: 'Password',
                           labelStyle: TextStyle(color: Colors.teal.shade700),
                           filled: true,
                           fillColor: Colors.teal.shade50,
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(14),
-                            borderSide: BorderSide(color: Colors.teal.shade700, width: 2),
+                            borderSide: BorderSide(
+                              color: Colors.teal.shade700,
+                              width: 2,
+                            ),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(14),
-                            borderSide: BorderSide(color: Colors.teal.shade200, width: 1),
+                            borderSide: BorderSide(
+                              color: Colors.teal.shade200,
+                              width: 1,
+                            ),
                           ),
                           errorBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(14),
@@ -165,11 +199,16 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                           ),
                           focusedErrorBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(14),
-                            borderSide: BorderSide(color: Colors.red.shade700, width: 2),
+                            borderSide: BorderSide(
+                              color: Colors.red.shade700,
+                              width: 2,
+                            ),
                           ),
                           suffixIcon: IconButton(
                             icon: Icon(
-                              _obscureText ? Icons.visibility : Icons.visibility_off,
+                              _obscureText
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
                               color: Colors.teal.shade700,
                             ),
                             onPressed: () {
@@ -203,7 +242,11 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                               borderRadius: BorderRadius.circular(16),
                             ),
                             elevation: 8,
-                            backgroundColor: _isLoginButtonEnabled ? Colors.teal : Colors.grey, // Change color based on condition
+                            backgroundColor:
+                                _isLoginButtonEnabled
+                                    ? Colors.teal
+                                    : Colors
+                                        .grey, // Change color based on condition
                           ),
                           child: Text(
                             'Login',

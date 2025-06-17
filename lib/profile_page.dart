@@ -11,7 +11,7 @@ class ProfilePage extends StatelessWidget {
         backgroundColor: Colors.teal[700],
         elevation: 0,
         title: const Text('Google Account'),
-        centerTitle: true,
+        centerTitle: true,                      
       ),
       body: Column(
         children: [
