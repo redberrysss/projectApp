@@ -61,9 +61,7 @@ class _LoginPageState extends State<LoginPage>
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage(
-              '"C:\Users\haiqal\Downloads\flutter\flutter_application_1\project_dev\lib\pexels-amresh444-32572717.jpg"',
-            ), // <-- your image path
+            image: AssetImage('assets/images/pexels-amresh444-32572717.jpg'),
             fit: BoxFit.cover,
           ),
           gradient: LinearGradient(
