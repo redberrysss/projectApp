@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'rating_page.dart';
+import 'my_booking_page.dart';
 
 enum PaymentMethod { card, onlineBanking, tng }
 
@@ -9,13 +10,15 @@ class PaymentPage extends StatefulWidget {
   final DateTime checkInDate;
   final DateTime checkOutDate;
   final int guests;
+  final double totalAmount;
 
   const PaymentPage({
     super.key,
     required this.packageTitle,
     required this.checkInDate,
     required this.checkOutDate,
-    required this.guests, required double totalAmount,
+    required this.guests,
+    required this.totalAmount,
   });
 
   @override
@@ -48,23 +51,7 @@ class _PaymentPageState extends State<PaymentPage> {
   @override
   void initState() {
     super.initState();
-    _calculateTotalAmount();
-  }
-
-  void _calculateTotalAmount() {
-    int nights = widget.checkOutDate.difference(widget.checkInDate).inDays;
-    if (nights == 0) nights = 1;
-
-    double pricePerGuestPerNight;
-    if (nights <= 2) {
-      pricePerGuestPerNight = 50.0;
-    } else if (nights <= 4) {
-      pricePerGuestPerNight = 45.0;
-    } else {
-      pricePerGuestPerNight = 40.0;
-    }
-
-    totalAmount = widget.guests * pricePerGuestPerNight * nights;
+    totalAmount = widget.totalAmount;
   }
 
   void _submitPayment() async {
@@ -89,6 +76,25 @@ class _PaymentPageState extends State<PaymentPage> {
 
   void _showReceiptDialog(String title) {
     final now = DateTime.now();
+
+    // Add booking record to BookingManager
+    BookingManager.instance.addBooking(
+      BookingRecord(
+        packageTitle: widget.packageTitle,
+        checkInDate: widget.checkInDate,
+        checkOutDate: widget.checkOutDate,
+        adults: widget.guests,
+        children: 0,
+        infants: 0,
+        amount: totalAmount,
+        paymentMethod: selectedMethod == PaymentMethod.card
+            ? 'Card'
+            : selectedMethod == PaymentMethod.onlineBanking
+                ? selectedBank
+                : 'TNG',
+      ),
+    );
+
     showDialog(
       context: context,
       builder: (_) => AlertDialog(

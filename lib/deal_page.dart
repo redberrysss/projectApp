@@ -1,41 +1,157 @@
 import 'package:flutter/material.dart';
+import 'booking_page.dart';
 
-class DealsPage extends StatelessWidget {
+class DealsPage extends StatefulWidget {
   final String country;
   final double maxDiscount;
-  const DealsPage({super.key, required this.country, required this.maxDiscount});
+  final String flagEmoji;
+  const DealsPage({super.key, required this.country, required this.maxDiscount, required this.flagEmoji});
+
+  @override
+  State<DealsPage> createState() => _DealsPageState();
+}
+
+class _DealsPageState extends State<DealsPage> {
+  late String selectedDestination;
+
+  final Map<String, Map<String, List<Map<String, dynamic>>>> hotelsByCountryAndDestination = {
+    "Malaysia": {
+      "Kuala Lumpur": [
+        {
+          "name": "One World Hotel",
+          "location": "One Utama / Damansara",
+          "discount": 41,
+          "image": "https://picsum.photos/300/200?random=11",
+          "rating": 4.5,
+        },
+        {
+          "name": "Deface Platinum Suites",
+          "location": "Kuala Lumpur",
+          "discount": 64,
+          "image": "https://picsum.photos/300/200?random=12",
+          "rating": 4.7,
+        },
+      ],
+      "Petaling Jaya": [
+        {
+          "name": "Sunway Resort",
+          "location": "Petaling Jaya",
+          "discount": 38,
+          "image": "https://picsum.photos/300/200?random=13",
+          "rating": 4.6,
+        },
+      ],
+      "Penang": [
+        // Add Penang hotels here if any
+      ],
+    },
+    "Thailand": {
+      "Bangkok": [
+        {
+          "name": "Bangkok Hotel 1",
+          "location": "Central Bangkok",
+          "discount": 22,
+          "image": "https://picsum.photos/300/200?random=16",
+          "rating": 4.2,
+        },
+      ],
+      "Phuket": [
+        {
+          "name": "Phuket Resort",
+          "location": "Patong Beach",
+          "discount": 28,
+          "image": "https://picsum.photos/300/200?random=17",
+          "rating": 4.5,
+        },
+      ],
+    },
+    "Indonesia": {
+      "Bali": [
+        {
+          "name": "Bali Beach Resort",
+          "location": "Kuta",
+          "discount": 30,
+          "image": "https://picsum.photos/300/200?random=18",
+          "rating": 4.4,
+        },
+      ],
+      "Jakarta": [
+        {
+          "name": "Jakarta Hotel",
+          "location": "Central Jakarta",
+          "discount": 25,
+          "image": "https://picsum.photos/300/200?random=19",
+          "rating": 4.1,
+        },
+      ],
+    },
+    "Vietnam": {
+      "Hanoi": [
+        {
+          "name": "Hanoi Hotel 1",
+          "location": "Hanoi Center",
+          "discount": 25,
+          "image": "https://picsum.photos/300/200?random=14",
+          "rating": 4.3,
+        },
+      ],
+      "Ho Chi Minh City": [
+        {
+          "name": "Saigon Hotel",
+          "location": "District 1",
+          "discount": 30,
+          "image": "https://picsum.photos/300/200?random=15",
+          "rating": 4.4,
+        },
+      ],
+    },
+    "Cambodia": {
+      "Phnom Penh": [
+        {
+          "name": "Phnom Penh Hotel",
+          "location": "City Center",
+          "discount": 20,
+          "image": "https://picsum.photos/300/200?random=20",
+          "rating": 4.0,
+        },
+      ],
+      "Siem Reap": [
+        {
+          "name": "Siem Reap Resort",
+          "location": "Near Angkor Wat",
+          "discount": 22,
+          "image": "https://picsum.photos/300/200?random=21",
+          "rating": 4.3,
+        },
+      ],
+    },
+    "Singapore": {
+      "Singapore City": [
+        {
+          "name": "Singapore Hotel",
+          "location": "Marina Bay",
+          "discount": 27,
+          "image": "https://picsum.photos/300/200?random=22",
+          "rating": 4.6,
+        },
+      ],
+    },
+  };
+
+  @override
+  void initState() {
+    super.initState();
+    final destinations = hotelsByCountryAndDestination[widget.country]?.keys.toList() ?? [];
+    selectedDestination = destinations.isNotEmpty ? destinations[0] : '';
+  }
 
   @override
   Widget build(BuildContext context) {
-    final hotels = [
-      {
-        "name": "One World Hotel",
-        "location": "One Utama / Damansara",
-        "discount": 41,
-        "image": "https://picsum.photos/300/200?random=11",
-        "rating": 4.5,
-      },
-      {
-        "name": "Deface Platinum Suites",
-        "location": "Kuala Lumpur",
-        "discount": 64,
-        "image": "https://picsum.photos/300/200?random=12",
-        "rating": 4.7,
-      },
-      {
-        "name": "Sunway Resort",
-        "location": "Petaling Jaya",
-        "discount": 38,
-        "image": "https://picsum.photos/300/200?random=13",
-        "rating": 4.6,
-      },
-    ];
-
-    String selectedDestination = "Kuala Lumpur";
+    final hotels = hotelsByCountryAndDestination[widget.country]?[selectedDestination] ?? [];
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Travel to $country'),
+        title: Text('Travel to ${widget.country} ${widget.flagEmoji}'),
         backgroundColor: Colors.teal[700],
         leading: const BackButton(),
       ),
@@ -54,7 +170,7 @@ class DealsPage extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  'Travel to $country 🇲🇾',
+                  'Travel to ${widget.country} ${widget.flagEmoji}',
                   style: const TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
@@ -63,7 +179,7 @@ class DealsPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Congratulations, grab up to ${maxDiscount.toInt()}% off on our participating hotels!',
+                  'Congratulations, grab up to ${widget.maxDiscount.toInt()}% off on our participating hotels!',
                   style: const TextStyle(fontSize: 16),
                   textAlign: TextAlign.center,
                 ),
@@ -97,10 +213,16 @@ class DealsPage extends StatelessWidget {
                     isExpanded: true,
                     icon: const Icon(Icons.keyboard_arrow_down),
                     underline: Container(height: 1, color: Colors.teal),
-                    items: ["Kuala Lumpur", "Petaling Jaya", "Penang"]
+                    items: (hotelsByCountryAndDestination[widget.country]?.keys.toList() ?? [])
                         .map((e) => DropdownMenuItem(value: e, child: Text(e)))
                         .toList(),
-                    onChanged: (_) {},
+                    onChanged: (value) {
+                      if (value != null) {
+                        setState(() {
+                          selectedDestination = value;
+                        });
+                      }
+                    },
                   ),
                 ),
               ],
@@ -118,7 +240,13 @@ class DealsPage extends StatelessWidget {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                   child: InkWell(
                     borderRadius: BorderRadius.circular(16),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => BookingPage(packageTitle: hotel['name'] as String, price: 70.0),
+                        ),
+                      );
+                    },
                     child: Column(
                       children: [
                         Stack(
@@ -228,7 +356,7 @@ class DealsPage extends StatelessWidget {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
               ),
               onPressed: () {},
-              child: const Text('Search for more hotels in Kuala Lumpur'),
+              child: Text('Search for more hotels in \$selectedDestination'),
             ),
           ),
         ],

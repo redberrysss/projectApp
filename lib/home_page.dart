@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'booking_page.dart';
 import 'package_page.dart';
 import 'browse_hotel_page.dart';
 import 'customer_support_page.dart';
@@ -8,6 +7,8 @@ import 'profile_page.dart';
 import 'my_booking_page.dart';
 import 'state_select_page.dart';
 import 'deal_page.dart';
+import 'all_deals_page.dart';
+import 'favorites_page.dart';
 
 class _ColoredQuickActionCard extends StatelessWidget {
   final IconData icon;
@@ -90,17 +91,17 @@ class _HomePageState extends State<HomePage> {
     FeaturedItem(
       title: 'Luxury Resort',
       subtitle: 'Exclusive offers on luxury stays',
-      imageUrl: 'https://picsum.photos/600/400?random=1',
+      imageUrl: 'assets/images/my_image1.jpg',
     ),
     FeaturedItem(
       title: 'City Hotels',
       subtitle: 'Best city hotels at great prices',
-      imageUrl: 'https://picsum.photos/600/400?random=2',
+      imageUrl: 'assets/images/my_image2.jpg',
     ),
     FeaturedItem(
       title: 'Beachside Escape',
       subtitle: 'Relax with an ocean view',
-      imageUrl: 'https://picsum.photos/600/400?random=3',
+      imageUrl: 'assets/images/my_image3.jpg',
     ),
   ];
 
@@ -222,8 +223,8 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Search bar
-            _buildSearchBar(),
+            // Removed the top search bar as per user request
+            // _buildSearchBar(),
             const SizedBox(height: 24),
             // Featured slider
             _buildFeatureSlider(),
@@ -259,39 +260,12 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // Search bar widget
-  Widget _buildSearchBar() {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.teal[50],
-        borderRadius: BorderRadius.circular(30),
-      ),
-      child: TextField(
-        decoration: InputDecoration(
-          hintText: 'Search for hotels...',
-          filled: true,
-          fillColor: Colors.teal[50],
-          prefixIcon: const Icon(Icons.search, color: Colors.teal),
-          contentPadding: const EdgeInsets.symmetric(vertical: 14),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(30),
-            borderSide: BorderSide.none,
-          ),
-        ),
-        onSubmitted: (value) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Search for "\$value" coming soon!')),
-          );
-        },
-      ),
-    );
-  }
-
   // Widget for the horizontal featured slider with page controller
   Widget _buildFeatureSlider() {
     return SizedBox(
       height: 200,
       child: PageView.builder(
+        physics: const PageScrollPhysics(),
         itemCount: featuredItems.length,
         onPageChanged: (index) {
           setState(() {
@@ -314,13 +288,9 @@ class _HomePageState extends State<HomePage> {
               child: Stack(
                 fit: StackFit.expand,
                 children: [
-                  Image.network(
+                  Image.asset(
                     item.imageUrl,
                     fit: BoxFit.cover,
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return const Center(child: CircularProgressIndicator());
-                    },
                     errorBuilder: (context, error, stackTrace) {
                       return Container(
                         color: Colors.grey[300],
@@ -412,78 +382,84 @@ class _HomePageState extends State<HomePage> {
   }
 
   // Quick Actions section with colored buttons for better user friendliness
-Widget _buildQuickActions() {
- // ...inside _buildQuickActions()...
-final List<Map<String, dynamic>> actions = [
-  {
-    'icon': Icons.hotel,
-    'title': 'Book Hotel',
-    'color': Colors.teal[700], // Changed to teal
-    'onTap': () => Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => const StateSelectionPage()),
-    ),
-  },
-  {
-    'icon': Icons.search,
-    'title': 'Browse Hotels',
-    'color': Colors.teal[600], // Changed to teal
-    'onTap': () => Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => const BrowseHotelPage()),
-    ),
-  },
-  {
-    'icon': Icons.local_offer,
-    'title': 'Hotel Deals',
-    'color': Colors.teal[500], // Changed to teal
-    'onTap': () => ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Hotel Deals clicked! Coming soon...'),
-      ),
-    ),
-  },
-  {
-    'icon': Icons.favorite,
-    'title': 'Favorites',
-    'color': Colors.teal[400], // Changed to teal
-    'onTap': () => ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Favorites clicked! Coming soon...'),
-      ),
-    ),
-  },
-  {
-    'icon': Icons.support_agent,
-    'title': 'Support',
-    'color': Colors.teal[300], // Changed to teal
-    'onTap': () => Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => CustomerSupportPage()),
-    ),
-  },
-];
-
-  return Column(
-    children: List.generate((actions.length / 2).ceil(), (rowIndex) {
-      final rowItems = actions.skip(rowIndex * 2).take(2).toList();
-      return Padding(
-        padding: const EdgeInsets.only(bottom: 16),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: rowItems.map((action) => Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: _ColoredQuickActionCard(
-                icon: action['icon'] as IconData,
-                title: action['title'] as String,
-                color: action['color'] as Color,
-                onTap: action['onTap'] as VoidCallback,
+  Widget _buildQuickActions() {
+    // ...inside _buildQuickActions()...
+    final List<Map<String, dynamic>> actions = [
+      {
+        'icon': Icons.hotel,
+        'title': 'Book Hotel',
+        'color': Colors.teal[700], // Changed to teal
+        'onTap':
+            () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const StateSelectionPage(),
               ),
             ),
-          )).toList(),
+      },
+      {
+        'icon': Icons.search,
+        'title': 'Browse Hotels',
+        'color': Colors.teal[600], // Changed to teal
+        'onTap':
+            () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => const BrowseHotelPage()),
+            ),
+      },
+      {
+        'icon': Icons.local_offer,
+        'title': 'Hotel Deals',
+        'color': Colors.teal[500], // Changed to teal
+        'onTap': () => Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => const AllDealsPage()),
         ),
-      );
-    }),
-  );
-}
+      },
+      {
+        'icon': Icons.favorite,
+        'title': 'Favorites',
+        'color': Colors.teal[400], // Changed to teal
+        'onTap': () => Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => const FavoritesPage()),
+        ),
+      },
+      {
+        'icon': Icons.support_agent,
+        'title': 'Support',
+        'color': Colors.teal[300], // Changed to teal
+        'onTap':
+            () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => CustomerSupportPage()),
+            ),
+      },
+    ];
+
+    return Column(
+      children: List.generate((actions.length / 2).ceil(), (rowIndex) {
+        final rowItems = actions.skip(rowIndex * 2).take(2).toList();
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children:
+                rowItems
+                    .map(
+                      (action) => Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: _ColoredQuickActionCard(
+                            icon: action['icon'] as IconData,
+                            title: action['title'] as String,
+                            color: action['color'] as Color,
+                            onTap: action['onTap'] as VoidCallback,
+                          ),
+                        ),
+                      ),
+                    )
+                    .toList(),
+          ),
+        );
+      }),
+    );
+  }
 
   // Horizontal list of featured deals/hotels
   // Horizontal list of featured deals/hotels
@@ -497,20 +473,50 @@ final List<Map<String, dynamic>> actions = [
         country: 'Malaysia',
       ),
       FeaturedItem(
-        title: 'Travel te Thailand',
+        title: 'Travel to Thailand',
         subtitle: 'Up to 20% OFF',
         imageUrl: 'https://picsum.photos/300/200?random=6',
         discount: 20,
         country: 'Thailand',
       ),
       FeaturedItem(
-        title: 'Beachside Escape',
+        title: 'Travel to Indonesia',
         subtitle: 'Relax with an ocean view',
         imageUrl: 'https://picsum.photos/300/200?random=6',
-        discount: null, // Ensure to set discount to null
-        country: null, // Ensure to set country to null
+        discount: 30, 
+        country: 'Indonesia', 
+      ),
+      FeaturedItem(
+        title: 'Travel to Vietnam',
+        subtitle: 'Up to 20% OFF',
+        imageUrl: 'https://picsum.photos/300/200?random=6',
+        discount: 20,
+        country: 'Vietnam',
+      ),
+      FeaturedItem(
+        title: 'Travel to Cambodia',
+        subtitle: 'Up to 20% OFF',
+        imageUrl: 'https://picsum.photos/300/200?random=6',
+        discount: 20,
+        country: 'Cambodia',
+      ),
+      FeaturedItem(
+        title: 'Travel to Singapore',
+        subtitle: 'Up to 20% OFF',
+        imageUrl: 'https://picsum.photos/300/200?random=6',
+        discount: 20,
+        country: 'Singapore',
       ),
     ];
+
+  const Map<String, String> _countryFlagMap = {
+    'Malaysia': '🇲🇾',
+    'Thailand': '🇹🇭',
+    'Indonesia': '🇮🇩',
+    'Vietnam': '🇻🇳',
+    'Cambodia': '🇰🇭',
+    'Singapore': '🇸🇬',
+  };
 
     return SizedBox(
       height: 130,
@@ -530,6 +536,7 @@ final List<Map<String, dynamic>> actions = [
                           country: deal.country!,
                           maxDiscount:
                               deal.discount!.toDouble(), // Convert to double
+                          flagEmoji: _countryFlagMap[deal.country!] ?? '',
                         ),
                   ),
                 );
@@ -539,100 +546,105 @@ final List<Map<String, dynamic>> actions = [
                 );
               }
             },
- // ...inside _buildFeaturedDealsList()...
-child: ClipRRect(
-  borderRadius: BorderRadius.circular(16),
-  child: Container(
-    width: 220,
-    decoration: BoxDecoration(
-      color: Colors.grey[300], // fallback color
-      borderRadius: BorderRadius.circular(16),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.black.withOpacity(0.15),
-          offset: const Offset(0, 5),
-          blurRadius: 8,
-        ),
-      ],
-    ),
-    child: Stack(
-      fit: StackFit.expand,
-      children: [
-        Image.network(
-          deal.imageUrl,
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) => Center(
-            child: Icon(Icons.broken_image, size: 48, color: Colors.grey[600]),
-          ),
-        ),
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.25),
-            borderRadius: BorderRadius.circular(16),
-          ),
-        ),
-        // ...your existing text and badge widgets here...
-        Positioned(
-          left: 12,
-          bottom: 12,
-          right: 12,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                deal.title,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                  shadows: [
-                    Shadow(
-                      blurRadius: 5,
-                      color: Colors.black,
-                      offset: Offset(0, 1),
+            // ...inside _buildFeaturedDealsList()...
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Container(
+                width: 220,
+                decoration: BoxDecoration(
+                  color: Colors.grey[300], // fallback color
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.15),
+                      offset: const Offset(0, 5),
+                      blurRadius: 8,
+                    ),
+                  ],
+                ),
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    Image.network(
+                      deal.imageUrl,
+                      fit: BoxFit.cover,
+                      errorBuilder:
+                          (context, error, stackTrace) => Center(
+                            child: Icon(
+                              Icons.broken_image,
+                              size: 48,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.25),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                    // ...your existing text and badge widgets here...
+                    Positioned(
+                      left: 12,
+                      bottom: 12,
+                      right: 12,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            deal.title,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              shadows: [
+                                Shadow(
+                                  blurRadius: 5,
+                                  color: Colors.black,
+                                  offset: Offset(0, 1),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Text(
+                            deal.subtitle,
+                            style: const TextStyle(
+                              color: Colors.white70,
+                              fontSize: 12,
+                            ),
+                          ),
+                          if (deal.discount != null)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 2,
+                                ),
+                                child: Text(
+                                  "Up to ${deal.discount!.toInt()}% OFF",
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
               ),
-              Text(
-                deal.subtitle,
-                style: const TextStyle(
-                  color: Colors.white70,
-                  fontSize: 12,
-                ),
-              ),
-              if (deal.discount != null)
-                Padding(
-                  padding: const EdgeInsets.only(top: 5.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 2,
-                    ),
-                    child: Text(
-                      "Up to ${deal.discount!.toInt()}% OFF",
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12,
-                                ),
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
             ),
-          ),
-        );
-      },
-    ),
-  );
-}
+          );
+        },
+      ),
+    );
+  }
 }

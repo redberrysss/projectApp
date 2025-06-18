@@ -6,19 +6,21 @@ final Color mainGreen = Colors.teal;
 
 class BookingPage extends StatelessWidget {
   final String packageTitle;
+  final double price;
 
-  const BookingPage({Key? key, required this.packageTitle}) : super(key: key);
+  const BookingPage({Key? key, required this.packageTitle, required this.price}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BookingStepWhenWho(packageTitle: packageTitle);
+    return BookingStepWhenWho(packageTitle: packageTitle, price: price);
   }
 }
 
 class BookingStepWhenWho extends StatefulWidget {
   final String packageTitle;
+  final double price;
 
-  const BookingStepWhenWho({Key? key, required this.packageTitle}) : super(key: key);
+  const BookingStepWhenWho({Key? key, required this.packageTitle, required this.price}) : super(key: key);
 
   @override
   State<BookingStepWhenWho> createState() => _BookingStepWhenWhoState();
@@ -337,17 +339,18 @@ class _BookingStepWhenWhoState extends State<BookingStepWhenWho> {
                           ? () {
                               Navigator.of(context).push(
                                 PageRouteBuilder(
-                                  pageBuilder: (context, animation, secondaryAnimation) =>
-                                      BookingStepAdditionalOptions(
-                                        packageTitle: widget.packageTitle,
-                                        checkInDate: _checkInDate!,
-                                        checkOutDate: _checkOutDate!,
-                                        keyCollectionTime: keyCollectionTime!,
-                                        keyReturnTime: keyReturnTime!,
-                                        adults: adults,
-                                        children: children,
-                                        infants: infants,
-                                      ),
+                              pageBuilder: (context, animation, secondaryAnimation) =>
+                                  BookingStepAdditionalOptions(
+                                    packageTitle: widget.packageTitle,
+                                    price: widget.price,
+                                    checkInDate: _checkInDate!,
+                                    checkOutDate: _checkOutDate!,
+                                    keyCollectionTime: keyCollectionTime!,
+                                    keyReturnTime: keyReturnTime!,
+                                    adults: adults,
+                                    children: children,
+                                    infants: infants,
+                                  ),
                                   transitionsBuilder: (context, animation, secondaryAnimation, child) {
                                     return FadeTransition(opacity: animation, child: child);
                                   },
@@ -380,6 +383,7 @@ class _BookingStepWhenWhoState extends State<BookingStepWhenWho> {
 
 class BookingStepAdditionalOptions extends StatefulWidget {
   final String packageTitle;
+  final double price;
   final DateTime checkInDate;
   final DateTime checkOutDate;
   final TimeOfDay keyCollectionTime;
@@ -391,6 +395,7 @@ class BookingStepAdditionalOptions extends StatefulWidget {
   const BookingStepAdditionalOptions({
     Key? key,
     required this.packageTitle,
+    required this.price,
     required this.checkInDate,
     required this.checkOutDate,
     required this.keyCollectionTime,
@@ -417,22 +422,23 @@ class _BookingStepAdditionalOptionsState extends State<BookingStepAdditionalOpti
         opaque: false,
         barrierDismissible: true,
         barrierColor: Colors.black38,
-        pageBuilder: (context, animation, secondaryAnimation) =>
-          BookingSummaryDialog(
-            packageTitle: widget.packageTitle,
-            checkInDate: widget.checkInDate,
-            checkOutDate: widget.checkOutDate,
-            keyCollectionTime: widget.keyCollectionTime,
-            keyReturnTime: widget.keyReturnTime,
-            adults: widget.adults,
-            children: widget.children,
-            infants: widget.infants,
-            petAllowed: petAllowed,
-            breakfastProvided: breakfastProvided,
-            needExtraBed: needExtraBed,
-            additionalOptionsText: additionalOptionsText,
-            mainGreen: mainGreen,
-          ),
+          pageBuilder: (context, animation, secondaryAnimation) =>
+            BookingSummaryDialog(
+              packageTitle: widget.packageTitle,
+              price: widget.price,
+              checkInDate: widget.checkInDate,
+              checkOutDate: widget.checkOutDate,
+              keyCollectionTime: widget.keyCollectionTime,
+              keyReturnTime: widget.keyReturnTime,
+              adults: widget.adults,
+              children: widget.children,
+              infants: widget.infants,
+              petAllowed: petAllowed,
+              breakfastProvided: breakfastProvided,
+              needExtraBed: needExtraBed,
+              additionalOptionsText: additionalOptionsText,
+              mainGreen: mainGreen,
+            ),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },
@@ -615,6 +621,7 @@ class _BookingStepAdditionalOptionsState extends State<BookingStepAdditionalOpti
 
 class BookingSummaryDialog extends StatelessWidget {
   final String packageTitle;
+  final double price;
   final DateTime checkInDate;
   final DateTime checkOutDate;
   final TimeOfDay keyCollectionTime;
@@ -631,6 +638,7 @@ class BookingSummaryDialog extends StatelessWidget {
   const BookingSummaryDialog({
     Key? key,
     required this.packageTitle,
+    required this.price,
     required this.checkInDate,
     required this.checkOutDate,
     required this.keyCollectionTime,
@@ -731,8 +739,7 @@ class BookingSummaryDialog extends StatelessWidget {
                       int totalGuests = adults + children + infants;
                       int totalNights = checkOutDate.difference(checkInDate).inDays;
 
-                      double pricePerGuestPerNight = 70.0;
-                      double totalAmount = totalGuests * pricePerGuestPerNight * totalNights;
+                      double totalAmount = totalGuests * price * totalNights;
 
                       Navigator.of(context).push(
                         PageRouteBuilder(

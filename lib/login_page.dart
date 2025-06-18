@@ -97,7 +97,7 @@ class _LoginPageState extends State<LoginPage>
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        'TripJr',
+                        'TripJer',
                         style: TextStyle(
                           fontSize: 36,
                           fontWeight: FontWeight.bold,
@@ -229,7 +229,24 @@ class _LoginPageState extends State<LoginPage>
                           });
                         },
                       ),
-                      SizedBox(height: 30),
+                      SizedBox(height: 8),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: () {
+                            // TODO: Implement forgot password functionality
+                            print('Forgot Password tapped');
+                          },
+                          child: Text(
+                            'Forgot Password?',
+                            style: TextStyle(
+                              color: Colors.teal.shade700,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 22),
                       SizedBox(
                         width: double.infinity,
                         height: 52,
