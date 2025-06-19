@@ -45,24 +45,19 @@ class _PaymentPageState extends State<PaymentPage> {
     'RHB',
     'Bank Islam',
   ];
-
   late double totalAmount;
-
   @override
   void initState() {
     super.initState();
     totalAmount = widget.totalAmount;
   }
-
   void _submitPayment() async {
     if (selectedMethod == PaymentMethod.card || selectedMethod == PaymentMethod.onlineBanking) {
       if (!(_formKey.currentState?.validate() ?? false)) return;
     }
-
     setState(() => isProcessing = true);
     await Future.delayed(const Duration(seconds: 2));
     setState(() => isProcessing = false);
-
     _showReceiptDialog('Payment Successful via ${selectedMethod == PaymentMethod.card ? "Card" : selectedBank}');
   }
 
@@ -70,13 +65,11 @@ class _PaymentPageState extends State<PaymentPage> {
     setState(() => isProcessing = true);
     await Future.delayed(const Duration(seconds: 3));
     setState(() => isProcessing = false);
-
     _showReceiptDialog('Payment Successful via TNG');
   }
-
   void _showReceiptDialog(String title) {
     final now = DateTime.now();
-
+    
     // Add booking record to BookingManager
     BookingManager.instance.addBooking(
       BookingRecord(
@@ -94,7 +87,6 @@ class _PaymentPageState extends State<PaymentPage> {
                 : 'TNG',
       ),
     );
-
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
